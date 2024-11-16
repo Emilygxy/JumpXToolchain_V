@@ -13,7 +13,8 @@ CharWindow::CharWindow(JumpXEditor *parent) : QOpenGLWidget(parent) {
 }
 
 CharWindow::~CharWindow() {
-	setupScene(nullptr, QDir());
+	QDir dir;
+	setupScene(nullptr, dir);
 
 	makeCurrent();
 	delete m_missingTex;

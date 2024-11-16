@@ -268,7 +268,8 @@ void JumpXEditor::tryOpenFile(QString path) {
 	if (!path.isEmpty()) {
 		m_scene = new XScene();
 		try {
-			m_scene->loadFromFile(QFile(path));
+			QFile f(path);
+			m_scene->loadFromFile(f);
 		} catch (QString msg) {
 			m_scene->endProgress();
 			checkWarnings(m_scene);
@@ -301,7 +302,8 @@ void JumpXEditor::onActionCombine() {
 		if (!fileName.isEmpty()) {
 			XScene *newScene = new XScene();
 			try {
-				newScene->loadFromFile(QFile(fileName));
+				QFile f(fileName);
+				newScene->loadFromFile(f);
 			} catch (QString msg) {
 				m_scene->endProgress();
 				checkWarnings(newScene);
@@ -456,7 +458,8 @@ void JumpXEditor::setupScene() {
 	updateInfoString();
 	ui.fileDescEdit->setPlainText(m_scene->m_desc);
 	ui.tree_Bone->expandAll();
-	charWindow->setupScene(m_scene, QDir(savePath.path()));
+	QDir dir(savePath.path());
+	charWindow->setupScene(m_scene, dir);
 }
 
 void JumpXEditor::updateInfoString() {
@@ -472,7 +475,8 @@ void JumpXEditor::updateInfoString() {
 }
 
 void JumpXEditor::clearScene() {
-	charWindow->setupScene(nullptr, QDir(savePath.path()));
+	QDir dir(savePath.path());
+	charWindow->setupScene(nullptr, dir);
 	ui.list_Tex->clear();
 	ui.list_Mtl->clear();
 	ui.list_Mesh->clear();
@@ -489,7 +493,8 @@ void JumpXEditor::clearScene() {
 
 bool JumpXEditor::saveScene(QString path) {
 	try {
-		m_scene->saveToFile(QFile(path));
+		QFile f(path);
+		m_scene->saveToFile(f);
 	} catch (QString msg) {
 		m_scene->endProgress();
 		QMessageBox::critical(this, "´íÎó", msg);
@@ -796,7 +801,8 @@ void JumpXEditor::onGeometryDelete() {
 		}
 		m_scene->m_geometries.erase(m_scene->m_geometries.begin() + m_selected.geometry);
 		delete ui.list_Mesh->takeItem(m_selected.geometry);
-		charWindow->setupScene(m_scene, QDir(savePath.path()));
+		QDir dir(savePath.path());
+		charWindow->setupScene(m_scene, dir);
 	}
 }
 
@@ -806,7 +812,8 @@ void JumpXEditor::onGeometryFlip() {
 		if (geo.normalData != nullptr)
 			for (int i = 0; i < geo.numVertex; i++)
 				geo.normalData[i] = -geo.normalData[i];
-		charWindow->setupScene(m_scene, QDir(savePath.path()));
+		QDir dir(savePath.path());
+		charWindow->setupScene(m_scene, dir);
 	}
 }
 
@@ -837,7 +844,8 @@ void JumpXEditor::onParticleDelete() {
 			item->setData(Qt::UserRole, i);
 		}
 		delete ui.list_Part->takeItem(m_selected.particle);
-		charWindow->setupScene(m_scene, QDir(savePath.path()));
+		QDir dir(savePath.path());
+		charWindow->setupScene(m_scene, dir);
 	}
 }
 
@@ -1002,7 +1010,8 @@ void JumpXEditor::onParticleLoad() {
 			prt.alpha[2] = obj["color"].toArray()[2].toArray()[3].toDouble();
 
 			file.close();
-			charWindow->setupScene(m_scene, QDir(savePath.path()));
+			QDir dir(savePath.path());
+			charWindow->setupScene(m_scene, dir);
 			clearEditArea();
 		}
 	}
@@ -1017,7 +1026,8 @@ void JumpXEditor::onRibbonDelete() {
 			item->setData(Qt::UserRole, i);
 		}
 		delete ui.list_Ribbon->takeItem(m_selected.ribbon);
-		charWindow->setupScene(m_scene, QDir(savePath.path()));
+		QDir dir(savePath.path());
+		charWindow->setupScene(m_scene, dir);
 	}
 }
 
@@ -1025,7 +1035,8 @@ void JumpXEditor::onRibbonInverse() {
 	if (m_selected.ribbon != -1) {
 		XRibbon &ribbon = m_scene->m_ribbons[m_selected.ribbon];
 		swap(ribbon.startPos, ribbon.endPos);
-		charWindow->setupScene(m_scene, QDir(savePath.path()));
+		QDir dir(savePath.path());
+		charWindow->setupScene(m_scene, dir);
 	}
 }
 

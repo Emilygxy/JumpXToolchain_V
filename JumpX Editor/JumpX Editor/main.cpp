@@ -21,7 +21,8 @@ void iterateXModels() {
 		XScene scene(false);
 		cnt++;
 		try {
-			scene.loadFromFile(QFile(line));
+			QFile fi(line);
+			scene.loadFromFile(fi);
 		} catch (QString msg) {
 			while (scene.haveWarning())
 				msg += "\n" + scene.nextWarning();
