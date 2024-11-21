@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <QDesktopServices>
 #include "JumpXEditor.h"
 #include "WidgetAction.h"
@@ -10,6 +10,8 @@
 #include "WidgetBone.h"
 #include "WidgetAttachment.h"
 #include "DialogAbout.h"
+#include "QTextEditDialog.h"
+#include <algorithm>
 
 template<typename T> T* CutArray(T* orinArr, int orinSize, int start, int end) {
 	T* newArr = new T[end - start];
@@ -41,7 +43,7 @@ JumpXEditor::JumpXEditor(QWidget *parent)
 	ui.splitter->setSizes(QList<int>({ 0 }));
 	ui.tree_Bone->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-	this->setWindowTitle("JumpX Editor XÄ£ÐÍ±à¼­¹¤¾ß " EDITOR_VERSION);
+	this->setWindowTitle("JumpX Editor Xæ¨¡åž‹ç¼–è¾‘å·¥å…· " EDITOR_VERSION);
 
 	ui.action_Open->setIcon(QIcon(":/icon/edit-file.png"));
 	connect(ui.action_Open, SIGNAL(triggered()), this, SLOT(onActionOpen()));
@@ -105,13 +107,13 @@ JumpXEditor::JumpXEditor(QWidget *parent)
 	QWidgetAction *sliderAction = new QWidgetAction(ui.mainToolBar);
 	QSlider *slider = new QSlider(Qt::Horizontal, this);
 	slider->setMaximumWidth(160);
-	slider->setToolTip("²¥·ÅËÙ¶È£º1.0");
+	slider->setToolTip("æ’­æ”¾é€Ÿåº¦1.0");
 	slider->setRange(-10, 10);
 	sliderAction->setDefaultWidget(slider);
 	ui.mainToolBar->addAction(sliderAction);
 	connect(slider, &QAbstractSlider::sliderMoved, [this, slider](int value) {
 		float times = pow(10, value / 15.0f);
-		slider->setToolTip(QString("²¥·ÅËÙ¶È£º%1").arg(times, 0, 'f', 1));
+		slider->setToolTip(QString("æ’­æ”¾é€Ÿåº¦%1").arg(times, 0, 'f', 1));
 		float fps = 32 * times;
 		glUpdateTimer->setInterval(1000 / fps);
 		});
@@ -129,6 +131,8 @@ JumpXEditor::JumpXEditor(QWidget *parent)
 	connect(ui.btn_MtlDel, &QAbstractButton::clicked, this, &JumpXEditor::onMaterialDelete);
 	ui.btn_MtlColor->setIcon(QIcon(":/icon/color.png"));
 	connect(ui.btn_MtlColor, &QAbstractButton::clicked, this, &JumpXEditor::onMaterialColor);
+
+	connect(ui.btn_EditMtlColor, &QAbstractButton::clicked, this, &JumpXEditor::onEditingMaterialColor);
 
 	ui.btn_GeoDel->setIcon(QIcon(":/icon/delete.png"));
 	connect(ui.btn_GeoDel, &QAbstractButton::clicked, this, &JumpXEditor::onGeometryDelete);
@@ -180,11 +184,11 @@ JumpXEditor::JumpXEditor(QWidget *parent)
 
 void JumpXEditor::onSaveAnimTemplate() {
 	if (m_scene != nullptr) {
-		QString fileName = QFileDialog::getSaveFileName(this, "Ñ¡Ôñ±£´æÎ»ÖÃ", "", "Json (*.json)");
+		QString fileName = QFileDialog::getSaveFileName(this, "é€‰æ‹©ä¿å­˜ä½ç½®", "", "Json (*.json)");
 		if (!fileName.isEmpty()) {
 			QFile file = fileName;
 			if (!file.open(QIODevice::WriteOnly)) {
-				QMessageBox::critical(this, "´íÎó", "´ò¿ªÎÄ¼þÊ§°Ü");
+				QMessageBox::critical(this, "é”™è¯¯", "æ‰“å¼€æ–‡ä»¶å¤±è´¥");
 				return;
 			}
 
@@ -206,11 +210,11 @@ void JumpXEditor::onSaveAnimTemplate() {
 
 void JumpXEditor::onLoadAnimTemplate() {
 	if (m_scene != nullptr) {
-		QString fileName = QFileDialog::getOpenFileName(this, "Ñ¡ÔñJsonÎÄ¼þ", "", "Json (*.json)");
+		QString fileName = QFileDialog::getOpenFileName(this, "é€‰æ‹©Jsonæ–‡ä»¶", "", "Json (*.json)");
 		if (!fileName.isEmpty()) {
 			QFile file = fileName;
 			if (!file.open(QIODevice::ReadOnly)) {
-				QMessageBox::critical(this, "´íÎó", "´ò¿ªÎÄ¼þÊ§°Ü");
+				QMessageBox::critical(this, "é”™è¯¯", "æ‰“å¼€æ–‡ä»¶å¤±è´¥");
 				return;
 			}
 
@@ -220,7 +224,7 @@ void JumpXEditor::onLoadAnimTemplate() {
 			QJsonParseError jsonError;
 			QJsonArray arr = QJsonDocument::fromJson(file.readAll(), &jsonError).array();
 			if (jsonError.error != QJsonParseError::NoError) {
-				QMessageBox::critical(this, "´íÎó", "¶ÁÈ¡JsonÊ§°Ü£º\n" + jsonError.errorString());
+				QMessageBox::critical(this, "é”™è¯¯", "è¯»å–Jsonå¤±è´¥ï¼š\n" + jsonError.errorString());
 				file.close();
 				return;
 			}
@@ -273,7 +277,7 @@ void JumpXEditor::tryOpenFile(QString path) {
 		} catch (QString msg) {
 			m_scene->endProgress();
 			checkWarnings(m_scene);
-			QMessageBox::critical(this, "´íÎó", msg);
+			QMessageBox::critical(this, "é”™è¯¯", msg);
 			delete m_scene;
 			m_scene = nullptr;
 		}
@@ -291,14 +295,14 @@ void JumpXEditor::onActionOpen() {
 		onActionClose();
 
 	if (m_scene == nullptr) {
-		QString fileName = QFileDialog::getOpenFileName(this, "Ñ¡ÔñXÎÄ¼þ", "", "JumpX (*.x)");
+		QString fileName = QFileDialog::getOpenFileName(this, "é€‰æ‹©Xæ–‡ä»¶", "", "JumpX (*.x)");
 		tryOpenFile(fileName);
 	}
 }
 
 void JumpXEditor::onActionCombine() {
 	if (m_scene != nullptr) {
-		QString fileName = QFileDialog::getOpenFileName(this, "Ñ¡ÔñXÎÄ¼þ", "", "JumpX (*.x)");
+		QString fileName = QFileDialog::getOpenFileName(this, "é€‰æ‹©Xæ–‡ä»¶", "", "JumpX (*.x)");
 		if (!fileName.isEmpty()) {
 			XScene *newScene = new XScene();
 			try {
@@ -307,7 +311,7 @@ void JumpXEditor::onActionCombine() {
 			} catch (QString msg) {
 				m_scene->endProgress();
 				checkWarnings(newScene);
-				QMessageBox::critical(this, "´íÎó", msg);
+				QMessageBox::critical(this, "é”™è¯¯", msg);
 				delete newScene;
 				newScene = nullptr;
 			}
@@ -463,7 +467,7 @@ void JumpXEditor::setupScene() {
 }
 
 void JumpXEditor::updateInfoString() {
-	ui.fileInfoLabel->setText(QString("XÎÄ¼þ°æ±¾ %1\n¶¯»­×ÜÖ¡Êý %2\n\n%3 ¸öÌùÍ¼\n%4 ¸ö²ÄÖÊ\n%5 ¸öÍø¸ñ\n%6 ¸ö¹Ç÷À\n%7 ¸ö¸½¼þ\n%8 ¸öÆ®´ø\n%9 ¸öÁ£×Ó\n%10 ¸ö¶¯×÷")
+	ui.fileInfoLabel->setText(QString("Xæ–‡ä»¶ç‰ˆæœ¬ %1\nåŠ¨ç”»æ€»å¸§æ•° %2\n\n%3 ä¸ªè´´å›¾\n%4 ä¸ªæè´¨\n%5 ä¸ªç½‘æ ¼\n%6 ä¸ªéª¨éª¼\n%7 ä¸ªé™„ä»¶\n%8 ä¸ªé£˜å¸¦\n%9 ä¸ªç²’å­\n%10 ä¸ªåŠ¨ä½œ")
 		.arg(m_scene->m_head.version).arg(m_scene->m_head.numKey).arg(m_scene->m_head.ntex).arg(m_scene->m_head.nmtl).arg(m_scene->m_head.ngeo)
 		.arg(m_scene->m_head.nbon).arg(m_scene->m_head.natt).arg(m_scene->m_head.nrib).arg(m_scene->m_head.nprt).arg(m_scene->m_head.nact));
 
@@ -497,7 +501,7 @@ bool JumpXEditor::saveScene(QString path) {
 		m_scene->saveToFile(f);
 	} catch (QString msg) {
 		m_scene->endProgress();
-		QMessageBox::critical(this, "´íÎó", msg);
+		QMessageBox::critical(this, "é”™è¯¯", msg);
 		return false;
 	}
 
@@ -510,13 +514,13 @@ void JumpXEditor::checkWarnings(XScene *scene) {
 		QString msg = scene->nextWarning();
 		while (scene->haveWarning())
 			msg += "\n" + scene->nextWarning();
-		QMessageBox::warning(this, "¾¯¸æ", msg);
+		QMessageBox::warning(this, "è­¦å‘Š", msg);
 	}
 }
 
 void JumpXEditor::onActionClose() {
 	if (m_scene != nullptr) {
-		switch (QMessageBox::warning(this, "¹Ø±Õ", "ÊÇ·ñ±£´æµ±Ç°³¡¾°£¿", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel)) {
+		switch (QMessageBox::warning(this, "å…³é—­", "æ˜¯å¦ä¿å­˜å½“å‰åœºæ™¯ï¼Ÿ", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel)) {
 			case QMessageBox::Yes:
 				if (!saveScene(savePath.filePath())) return;
 			case QMessageBox::No:
@@ -536,7 +540,7 @@ void JumpXEditor::onActionSave() {
 
 void JumpXEditor::onActionSaveAs() {
 	if (m_scene != nullptr) {
-		QString saveFile = QFileDialog::getSaveFileName(this, "Ñ¡Ôñ±£´æÎ»ÖÃ", "", "JumpX (*.x)");
+		QString saveFile = QFileDialog::getSaveFileName(this, "é€‰æ‹©ä¿å­˜ä½ç½®", "", "JumpX (*.x)");
 		if (!saveFile.isEmpty()) {
 			if (saveScene(saveFile))
 				savePath = saveFile;
@@ -558,7 +562,7 @@ void JumpXEditor::closeEvent(QCloseEvent *event) {
 
 void JumpXEditor::onTranslate() {
 	if (m_scene != nullptr) {
-		QString value = QInputDialog::getText(this, "ÕûÌåÒÆ¶¯", "ÊäÈëÒÆ¶¯ÏòÁ¿£¬ÒÔ·ÖºÅ·Ö¸îXYZ");
+		QString value = QInputDialog::getText(this, "æ•´ä½“ç§»åŠ¨", "è¾“å…¥ç§»åŠ¨å‘é‡ï¼Œä»¥åˆ†å·åˆ†å‰²XYZ");
 		QStringList list = value.split(';');
 		if (list.size() == 3) {
 			QVector3D vec(list[0].toFloat(), list[1].toFloat(), list[2].toFloat());
@@ -578,7 +582,7 @@ void JumpXEditor::onTranslate() {
 
 void JumpXEditor::onRotate() {
 	if (m_scene != nullptr) {
-		QString value = QInputDialog::getText(this, "ÕûÌåÐý×ª", "ÊäÈëÐý×ª½Ç¶È£¬ÒÔ·ÖºÅ·Ö¸îXYZ");
+		QString value = QInputDialog::getText(this, "æ•´ä½“æ—‹è½¬", "è¾“å…¥æ—‹è½¬è§’åº¦ï¼Œä»¥åˆ†å·åˆ†å‰²XYZ");
 		QStringList list = value.split(';');
 		if (list.size() == 3) {
 			float angles[] = { list[0].toFloat(), list[1].toFloat(), list[2].toFloat() };
@@ -606,7 +610,7 @@ void JumpXEditor::onRotate() {
 
 void JumpXEditor::onScale() {
 	if (m_scene != nullptr) {
-		float value = QInputDialog::getDouble(this, "ÕûÌåËõ·Å", "ÊäÈë·Å´ó±¶Êý", 1.0, 0.01, 100, 10);
+		float value = QInputDialog::getDouble(this, "æ•´ä½“ç¼©æ”¾", "è¾“å…¥æ”¾å¤§å€æ•°", 1.0, 0.01, 100, 10);
 		if (value != 1.0f) {
 			for (XBone &bone : m_scene->m_bones) {
 				bone.matInv[12] *= value;
@@ -650,12 +654,12 @@ void JumpXEditor::onScale() {
 
 void JumpXEditor::onCutAnim() {
 	if (m_scene != nullptr) {
-		QString value = QInputDialog::getText(this, "²Ã¼ô¶¯»­", "ÊäÈë¿ªÊ¼ºÍ½áÊøÖ¡£¬ÒÔ·ÖºÅ·Ö¸î");
+		QString value = QInputDialog::getText(this, "è£å‰ªåŠ¨ç”»", "è¾“å…¥å¼€å§‹å’Œç»“æŸå¸§ï¼Œä»¥åˆ†å·åˆ†å‰²");
 		QStringList list = value.split(';');
 		if (list.size() == 2) {
 			int start = list[0].toInt(), end = list[1].toInt();
 			if (start >= end) {
-				QMessageBox::critical(this, "´íÎó", "Ö¡Êý²»ºÏ·¨");
+				QMessageBox::critical(this, "é”™è¯¯", "å¸§æ•°ä¸åˆæ³•");
 				return;
 			}
 
@@ -696,7 +700,7 @@ void JumpXEditor::onCutAnim() {
 void JumpXEditor::onChangeVersion() {
 	if (m_scene != nullptr) {
 		bool ok;
-		int version = QInputDialog::getInt(this, "¸Ä±ä°æ±¾", "XÎÄ¼þ°æ±¾", m_scene->m_head.version, 5, 8, 1, &ok);
+		int version = QInputDialog::getInt(this, "æ”¹å˜ç‰ˆæœ¬", "Xæ–‡ä»¶ç‰ˆæœ¬", m_scene->m_head.version, 5, 8, 1, &ok);
 		if (ok) {
 			m_scene->m_head.version = version;
 		}
@@ -730,7 +734,7 @@ void JumpXEditor::onBoneDelete() {
 			if (m_scene->m_ribbons[i].boneId == m_selected.bone)
 				usingItems += "\n" + ui.list_Ribbon->item(i)->text();
 		if (!usingItems.isEmpty()) {
-			QMessageBox::critical(this, "´íÎó", "´Ë¹Ç÷ÀÈÔÔÚ±»Õ¼ÓÃ£º" + usingItems);
+			QMessageBox::critical(this, "é”™è¯¯", "æ­¤éª¨éª¼ä»åœ¨è¢«å ç”¨ï¼š" + usingItems);
 			return;
 		}
 
@@ -770,7 +774,7 @@ void JumpXEditor::onBoneDelete() {
 
 void JumpXEditor::onBoneShowHide() {
 	if (m_selected.bone != -1) {
-		QString value = QInputDialog::getText(this, "ÉèÖÃÏÔÒþ", "ÊäÈë¿ªÊ¼Ö¡Êý£¬½áÊøÖ¡Êý£¬ÏÔÊ¾1/Òþ²Ø0£¬ÒÔ·ÖºÅ·Ö¸ô");
+		QString value = QInputDialog::getText(this, "è®¾ç½®æ˜¾éš", "è¾“å…¥å¼€å§‹å¸§æ•°ï¼Œç»“æŸå¸§æ•°ï¼Œæ˜¾ç¤º1/éšè—0ï¼Œä»¥åˆ†å·åˆ†éš”");
 		QStringList list = value.split(';');
 		if (list.size() == 3) {
 			int start = list[0].toInt(), end = list[1].toInt(), show = list[2].toInt();
@@ -851,11 +855,11 @@ void JumpXEditor::onParticleDelete() {
 
 void JumpXEditor::onParticleSave() {
 	if (m_selected.particle != -1) {
-		QString fileName = QFileDialog::getSaveFileName(this, "Ñ¡Ôñ±£´æÎ»ÖÃ", "", "Json (*.json)");
+		QString fileName = QFileDialog::getSaveFileName(this, "é€‰æ‹©ä¿å­˜ä½ç½®", "", "Json (*.json)");
 		if (!fileName.isEmpty()) {
 			QFile file = fileName;
 			if (!file.open(QIODevice::WriteOnly)) {
-				QMessageBox::critical(this, "´íÎó", "´ò¿ªÎÄ¼þÊ§°Ü");
+				QMessageBox::critical(this, "é”™è¯¯", "æ‰“å¼€æ–‡ä»¶å¤±è´¥");
 				return;
 			}
 
@@ -913,18 +917,18 @@ void JumpXEditor::onParticleSave() {
 
 void JumpXEditor::onParticleLoad() {
 	if (m_selected.particle != -1) {
-		QString fileName = QFileDialog::getOpenFileName(this, "Ñ¡ÔñÄ£°åÎÄ¼þ", "", "Json (*.json)");
+		QString fileName = QFileDialog::getOpenFileName(this, "é€‰æ‹©æ¨¡æ¿æ–‡ä»¶", "", "Json (*.json)");
 		if (!fileName.isEmpty()) {
 			QFile file = fileName;
 			if (!file.open(QIODevice::ReadOnly)) {
-				QMessageBox::critical(this, "´íÎó", "´ò¿ªÎÄ¼þÊ§°Ü");
+				QMessageBox::critical(this, "é”™è¯¯", "æ‰“å¼€æ–‡ä»¶å¤±è´¥");
 				return;
 			}
 
 			QJsonParseError jsonError;
 			QJsonObject obj = QJsonDocument::fromJson(file.readAll(), &jsonError).object();
 			if (jsonError.error != QJsonParseError::NoError) {
-				QMessageBox::critical(this, "´íÎó", "¶ÁÈ¡JsonÊ§°Ü£º\n" + jsonError.errorString());
+				QMessageBox::critical(this, "é”™è¯¯", "è¯»å–Jsonå¤±è´¥ï¼š\n" + jsonError.errorString());
 				file.close();
 				return;
 			}
@@ -1079,7 +1083,7 @@ void JumpXEditor::onTextureDelete() {
 			if (m_scene->m_ribbons[i].textureId == m_selected.texture)
 				usingItems += "\n" + ui.list_Ribbon->item(i)->text();
 		if (!usingItems.isEmpty()) {
-			QMessageBox::critical(this, "´íÎó", "´ËÌùÍ¼ÈÔÔÚ±»Õ¼ÓÃ£º" + usingItems);
+			QMessageBox::critical(this, "é”™è¯¯", "æ­¤è´´å›¾ä»åœ¨è¢«å ç”¨ï¼š" + usingItems);
 			return;
 		}
 
@@ -1141,7 +1145,7 @@ void JumpXEditor::onMaterialDelete() {
 			if (geo.materialId == m_selected.material)
 				usingItems += "\n" + geo.name;
 		if (!usingItems.isEmpty()) {
-			QMessageBox::critical(this, "´íÎó", "´Ë²ÄÖÊÈÔÔÚ±»Õ¼ÓÃ£º" + usingItems);
+			QMessageBox::critical(this, "é”™è¯¯", "æ­¤è´´å›¾ä»åœ¨è¢«å ç”¨ï¼š" + usingItems);
 			return;
 		}
 
@@ -1171,7 +1175,7 @@ void JumpXEditor::onMaterialCreate() {
 void JumpXEditor::onMaterialColor() {
 	if (m_selected.material != -1) {
 		bool editAlpha = ui.check_Alpha->isChecked();
-		QColor newColor = QColorDialog::getColor(Qt::white, this, "ÉèÖÃÑÕÉ«",
+		QColor newColor = QColorDialog::getColor(Qt::white, this, "è®¾ç½®é¢œè‰²",
 			editAlpha ? QColorDialog::ShowAlphaChannel : QColorDialog::ColorDialogOptions());
 		if (newColor.isValid()) {
 			XMaterial &mtl = m_scene->m_materials[m_selected.material];
@@ -1191,6 +1195,122 @@ void JumpXEditor::onMaterialColor() {
 				WidgetMaterial *wMtl = (WidgetMaterial *) widget;
 				if (&wMtl->mtl() == &mtl)
 					wMtl->colorBar()->setColorData(mtl.colorKeys, mtl.numColorKey);
+			}
+		}
+	}
+}
+
+void JumpXEditor::onEditingMaterialColor()
+{
+	struct FrameColor
+	{
+		int frame;
+		QColor color;
+
+		//asscend
+		bool operator < (const FrameColor& right) const
+		{
+			return frame < right.frame;
+		}
+
+		//desscend
+		bool operator > (const FrameColor& right) const
+		{
+			return frame > right.frame;
+		}
+	};
+	
+	auto blendFunc = [](int c1, int c2, float t)->float
+	{
+		return (t*c2 + (1.0-t)*c1);
+	};
+
+	auto getFrameColors = [](const XMaterial& mtl, const QString& colorTexts, QVector<FrameColor>& frameColors)
+	{
+		if (!colorTexts.isNull())
+		{
+			frameColors.clear();
+			QStringList fcs = colorTexts.split("\n");
+			for (auto ctStr : fcs)
+			{
+				QStringList ct = ctStr.split(";");
+				if (ct.size() == 5)
+				{
+					int frame = ct[0].toInt();
+					if (frame >= mtl.numColorKey)
+					{
+						continue;
+					}
+					FrameColor fc = { frame, QColor(ct[1].toInt(),ct[2].toInt(),ct[3].toInt(),ct[4].toInt()) };
+					frameColors.push_back(fc);
+				}
+			}
+
+			//asscend
+			std::sort(frameColors.begin(), frameColors.end(), std::less<FrameColor>());
+		}
+	};
+
+	if (m_selected.material != -1)
+	{
+		static TextEditDialog dialog;
+		dialog.setWindowTitle("ç¼–è¾‘å¸§é¢œè‰²");
+
+		if (dialog.exec() == QDialog::Accepted) 
+		{
+			QString userText = dialog.getText();
+			// cope with
+			QVector<FrameColor> frameColors;
+			XMaterial& mtl = m_scene->m_materials[m_selected.material];
+			getFrameColors(mtl, userText, frameColors);
+			if (!frameColors.empty())
+			{
+				if (mtl.colorKeys != nullptr)
+				{
+					int fcCount = frameColors.size();
+					if (fcCount < 2)
+					{
+						//only one
+						auto fc = frameColors[0];
+						mtl.colorKeys[fc.frame].color[0] = fc.color.red();
+						mtl.colorKeys[fc.frame].color[1] = fc.color.green();
+						mtl.colorKeys[fc.frame].color[2] = fc.color.blue();
+					}
+					else
+					{
+						for (size_t i = 0; i < fcCount; i++)
+						{
+							if ((i + 1 == fcCount))
+							{
+								// the last one
+								auto fc = frameColors[i];
+								mtl.colorKeys[fc.frame].color[0] = fc.color.red();
+								mtl.colorKeys[fc.frame].color[1] = fc.color.green();
+								mtl.colorKeys[fc.frame].color[2] = fc.color.blue();
+							}
+							else
+							{
+								int beginF = i, endF = i + 1;
+								int delta = frameColors[endF].frame - frameColors[beginF].frame;
+								for (int curFrame = frameColors[beginF].frame, i = 0; curFrame <= frameColors[endF].frame; curFrame++, i++)
+								{
+									float t = float(i) / float(delta);
+									mtl.colorKeys[curFrame].color[0] = blendFunc(frameColors[beginF].color.red(), frameColors[endF].color.red(), t);
+									mtl.colorKeys[curFrame].color[1] = blendFunc(frameColors[beginF].color.green(), frameColors[endF].color.green(), t);
+									mtl.colorKeys[curFrame].color[2] = blendFunc(frameColors[beginF].color.blue(), frameColors[endF].color.blue(), t);
+									mtl.colorKeys[curFrame].color[3] = blendFunc(frameColors[beginF].color.alpha(), frameColors[endF].color.alpha(), t);
+								}
+							}
+						}
+					}
+				}
+
+				QWidget* widget = m_editArea->widget();
+				if (widget->inherits("WidgetMaterial")) {
+					WidgetMaterial* wMtl = (WidgetMaterial*)widget;
+					if (&wMtl->mtl() == &mtl)
+						wMtl->colorBar()->setColorData(mtl.colorKeys, mtl.numColorKey);
+				}
 			}
 		}
 	}

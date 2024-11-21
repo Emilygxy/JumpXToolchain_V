@@ -35,6 +35,7 @@ private slots:
 	void onMaterialDelete();
 	void onMaterialCreate();
 	void onMaterialColor();
+	void onEditingMaterialColor();
 
 	void onParticleDelete();
 	void onParticleSave();
