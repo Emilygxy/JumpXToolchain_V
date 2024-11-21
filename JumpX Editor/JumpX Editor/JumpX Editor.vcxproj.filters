@@ -8,35 +8,8 @@
     <ClCompile Include="JumpXEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_JumpXEditor.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_JumpXEditor.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_JumpXEditor.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_CharWindow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_CharWindow.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_DialogAbout.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_DialogAbout.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="DialogAbout.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_SplashScreen.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_SplashScreen.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="SplashScreen.cpp">
       <Filter>Source Files</Filter>
@@ -46,12 +19,6 @@
     </ClCompile>
     <ClCompile Include="JumpX.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetTexture.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetTexture.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="WidgetRibbon.cpp">
       <Filter>Source Files</Filter>
@@ -74,74 +41,8 @@
     <ClCompile Include="WidgetAction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetRibbon.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetRibbon.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetParticle.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetParticle.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetMaterial.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetMaterial.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetGeometry.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetGeometry.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetBone.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetBone.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetAction.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetAction.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_QDeselectableListWidget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_QDeselectableListWidget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_QColorPicker.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_QColorPicker.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_QDeselectableTreeWidget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_QDeselectableTreeWidget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_QColorSlider.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_QColorSlider.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="WidgetAttachment.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_WidgetAttachment.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_WidgetAttachment.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +89,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_JumpXEditor.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="zlib\crc32.h">
       <Filter>Header Files\Zlib</Filter>
     </ClInclude>
@@ -230,119 +128,95 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_DialogAbout.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="JumpX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetTexture.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetRibbon.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetParticle.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetMaterial.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetGeometry.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetBone.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetAction.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_WidgetAttachment.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="JumpXEditor.h">
+    <QtMoc Include="JumpXEditor.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="JumpXEditor.ui">
+    </QtMoc>
+    <QtUic Include="JumpXEditor.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="JumpXEditor.qrc">
+    </QtUic>
+    <QtRcc Include="JumpXEditor.qrc">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="CharWindow.h">
+    </QtRcc>
+    <QtMoc Include="CharWindow.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="DialogAbout.h">
+    </QtMoc>
+    <QtMoc Include="DialogAbout.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="DialogAbout.ui">
+    </QtMoc>
+    <QtUic Include="DialogAbout.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="SplashScreen.h">
+    </QtUic>
+    <QtMoc Include="SplashScreen.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetTexture.h">
+    </QtMoc>
+    <QtMoc Include="WidgetTexture.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetTexture.ui">
+    </QtMoc>
+    <QtUic Include="WidgetTexture.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetRibbon.h">
+    </QtUic>
+    <QtMoc Include="WidgetRibbon.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetParticle.h">
+    </QtMoc>
+    <QtMoc Include="WidgetParticle.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetMaterial.h">
+    </QtMoc>
+    <QtMoc Include="WidgetMaterial.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetGeometry.h">
+    </QtMoc>
+    <QtMoc Include="WidgetGeometry.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetBone.h">
+    </QtMoc>
+    <QtMoc Include="WidgetBone.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetAction.h">
+    </QtMoc>
+    <QtMoc Include="WidgetAction.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetRibbon.ui">
+    </QtMoc>
+    <QtUic Include="WidgetRibbon.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetParticle.ui">
+    </QtUic>
+    <QtUic Include="WidgetParticle.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetMaterial.ui">
+    </QtUic>
+    <QtUic Include="WidgetMaterial.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetGeometry.ui">
+    </QtUic>
+    <QtUic Include="WidgetGeometry.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetBone.ui">
+    </QtUic>
+    <QtUic Include="WidgetBone.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetAction.ui">
+    </QtUic>
+    <QtUic Include="WidgetAction.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="QDeselectableListWidget.h">
+    </QtUic>
+    <QtMoc Include="QDeselectableListWidget.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="QColorPicker.h">
+    </QtMoc>
+    <QtMoc Include="QColorPicker.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="QDeselectableTreeWidget.h">
+    </QtMoc>
+    <QtMoc Include="QDeselectableTreeWidget.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="QColorSlider.h">
+    </QtMoc>
+    <QtMoc Include="QColorSlider.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetAttachment.ui">
+    </QtMoc>
+    <QtUic Include="WidgetAttachment.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="WidgetAttachment.h">
+    </QtUic>
+    <QtMoc Include="WidgetAttachment.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
+    </QtMoc>
+    <QtMoc Include="QTextEditDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="JumpX Editor.rc" />
